@@ -1,20 +1,20 @@
-import { Text, TouchableOpacity, View } from "react-native"
-import { useTheme } from "../hooks/useTheme"
+import { Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "../hooks/useTheme";
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme } = useTheme();
 
   const getThemeIcon = () => {
-    if (theme === "light") return "☀️"
-    if (theme === "dark") return "🌙"
-    return "⚙️"
-  }
+    if (theme === "light") return "☀️";
+    if (theme === "dark") return "🌙";
+    return "⚙️";
+  };
 
   const getThemeLabel = () => {
-    if (theme === "light") return "Light"
-    if (theme === "dark") return "Dark"
-    return "System"
-  }
+    if (theme === "light") return "Light";
+    if (theme === "dark") return "Dark";
+    return "System";
+  };
 
   return (
     <TouchableOpacity
@@ -29,5 +29,5 @@ export function ThemeToggle() {
         </Text>
       </View>
     </TouchableOpacity>
-  )
+  );
 }
