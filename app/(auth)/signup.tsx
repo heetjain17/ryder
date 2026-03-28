@@ -18,6 +18,8 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const handleSubmit = async () => {
     // Attempt sign up with password
     const { error } = await signUp.password({
@@ -167,7 +169,26 @@ const Signup = () => {
           <CustomButton
             title="I need a new code"
             onPress={() => signUp?.verifications.sendEmailCode()}
-            className="mt-2 border border-neutral-300 bg-transparent"
+            className="mt-2 border border-neutral-300 bg-transparent text-black"
+          />
+        </View>
+      </ReactNativeModal>
+      <ReactNativeModal isVisible={showSuccessModal}>
+        <View className="min-h-[300px] items-center justify-center rounded-2xl bg-white px-7 py-9">
+          <Text className="mb-2 font-JakartaExtraBold text-2xl text-green-600">
+            Account Created!
+          </Text>
+          <Text className="mb-5 text-center font-Jakarta">
+            Your account has been successfully created. Please check your email
+            to verify your account.
+          </Text>
+          <CustomButton
+            title="Go to Sign In"
+            onPress={() => {
+              setShowSuccessModal(false);
+              router.push("/signin");
+            }}
+            className="mt-5 bg-primary-500"
           />
         </View>
       </ReactNativeModal>
