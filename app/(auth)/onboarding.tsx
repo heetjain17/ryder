@@ -59,7 +59,7 @@ const Onboarding = () => {
             swiperRef.current?.scrollBy(1);
           }
         }}
-        className={`m-10 w-10/12`}
+        className={`m-10 w-11/12`}
       />
     </SafeAreaView>
   );

@@ -26,10 +26,7 @@ function RootLayoutContent() {
 
   useEffect(() => {
     if (loaded || error) {
-      // Simulate a loading delay so you can see the splash screen
-      setTimeout(() => {
-        SplashScreen.hideAsync();
-      }, 2000);
+      SplashScreen.hideAsync();
     }
   }, [loaded, error]);
 
