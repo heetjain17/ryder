@@ -2,6 +2,7 @@ import CustomButton from "@/components/CutomButton";
 import InputField from "@/components/InputField";
 import OAuth from "@/components/OAuth";
 import { icons, images } from "@/constants";
+import { fetchApi } from "@/lib/fetch";
 import { useAuth, useSignUp } from "@clerk/expo";
 import { Href, Link, useRouter } from "expo-router";
 import { useState } from "react";
@@ -43,6 +44,16 @@ const Signup = () => {
     });
 
     if (signUp.status === "complete") {
+      // creating user in database
+      await fetchApi("/(api)/user", {
+        method: "POST",
+        body: JSON.stringify({
+          name: name,
+          email: emailAddress,
+          clerkId: signUp.createdUserId,
+        }),
+      });
+
       await signUp.finalize({
         navigate: ({ session, decorateUrl }) => {
           if (session?.currentTask) {
