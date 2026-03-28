@@ -1,3 +1,5 @@
+import { ClerkProvider } from "@clerk/expo";
+import { tokenCache } from "@clerk/expo/token-cache";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -8,6 +10,12 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import "../global.css";
 import { useTheme } from "../hooks/useTheme";
+
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
+if (!publishableKey) {
+  throw new Error("Add your Clerk Publishable Key to the .env file");
+}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -55,10 +63,12 @@ function RootLayoutContent() {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider>
-        <RootLayoutContent />
-      </ThemeProvider>
-    </GestureHandlerRootView>
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider>
+          <RootLayoutContent />
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </ClerkProvider>
   );
 }
