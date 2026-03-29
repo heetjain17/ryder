@@ -156,7 +156,7 @@ const Signup = () => {
             Verify your account
           </Text>
           <Text className="mb-5 font-Jakarta">
-            We've sent a verification code to {emailAddress}.
+            We&apos;ve sent a verification code to {emailAddress}.
           </Text>
           <InputField
             label="Code"

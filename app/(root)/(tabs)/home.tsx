@@ -2,7 +2,10 @@ import GoogleTextInput from "@/components/GoogleTextInput";
 import Map from "@/components/Map";
 import RideCard from "@/components/RideCard";
 import { icons, images } from "@/constants";
+import { useLocationStore } from "@/store";
 import { useUser } from "@clerk/expo";
+import * as Location from "expo-location";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -125,11 +128,76 @@ const recentRides = [
 ];
 
 export default function Page() {
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
   const { user } = useUser();
   const loading = false;
 
+  const [hasPermission, setHasPermission] = useState(false);
+
   const handleLogout = () => {};
   const handleDestinationPress = () => {};
+
+  useEffect(() => {
+    const requestLocation = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+
+        if (status !== "granted") {
+          setHasPermission(false);
+          return;
+        }
+
+        setHasPermission(true);
+
+        const location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        }).catch(async () => await Location.getLastKnownPositionAsync());
+
+        if (!location?.coords) {
+          return;
+        }
+
+        const { latitude, longitude } = location.coords;
+        let addressLabel = "Current location";
+
+        try {
+          const address = await Location.reverseGeocodeAsync({
+            latitude,
+            longitude,
+          });
+
+          const firstAddress = address[0];
+          if (firstAddress) {
+            const formattedAddress = [
+              firstAddress.street,
+              firstAddress.city ?? firstAddress.region,
+              firstAddress.country,
+            ]
+              .filter(Boolean)
+              .join(", ");
+
+            if (formattedAddress) {
+              addressLabel = formattedAddress;
+            }
+          }
+        } catch (error) {
+          console.warn("Unable to reverse-geocode current location:", error);
+        }
+
+        setUserLocation({
+          latitude,
+          longitude,
+          address: addressLabel,
+        });
+      } catch (error) {
+        setHasPermission(false);
+        console.warn("Unable to fetch current location:", error);
+      }
+    };
+
+    requestLocation();
+  }, [setUserLocation]);
+
   return (
     <SafeAreaView className="flex-1 bg-general-500">
       <FlatList
