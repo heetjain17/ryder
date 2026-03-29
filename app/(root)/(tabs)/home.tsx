@@ -1,3 +1,5 @@
+import GoogleTextInput from "@/components/GoogleTextInput";
+import Map from "@/components/Map";
 import RideCard from "@/components/RideCard";
 import { icons, images } from "@/constants";
 import { useUser } from "@clerk/expo";
@@ -167,6 +169,25 @@ export default function Page() {
                 <Image source={icons.out} className="h-4 w-4" />
               </TouchableOpacity>
             </View>
+
+            <GoogleTextInput
+              // icon={icons.search}
+              containerStyle="bg-white shadow-md shadow-neutral-300"
+              handlePress={handleDestinationPress}
+            />
+
+            <>
+              <Text className="mb-3 mt-5 font-JakartaBold text-xl">
+                Your current location
+              </Text>
+              <View className="h-[300px] rounded-2xl">
+                <Map />
+              </View>
+            </>
+
+            <Text className="mb-3 mt-5 font-JakartaBold text-xl">
+              Recent Rides
+            </Text>
           </>
         )}
       />
